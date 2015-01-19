@@ -2,7 +2,12 @@
 <repository fileName="partyrepository.xml">
     <items>
         <agentRepItems/>
-        <partyRepItems>
+        <partyRepItems
+        ><partyRepItem
+                    description="Agent for group n"
+                    classPath="negotiator.groupn.Groupn"
+                    partyName="Group n"
+                    protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol"/>
             <partyRepItem
                     description="Deadline-based boulware agent"
                     classPath="negotiator.parties.BoulwareNegotiationParty"
