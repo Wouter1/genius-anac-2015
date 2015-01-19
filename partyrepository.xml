@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<repository fileName="partyrepository.xml">
+    <items>
+        <agentRepItems/>
+        <partyRepItems>
+            <partyRepItem
+                    description="Deadline-based boulware agent"
+                    classPath="negotiator.parties.BoulwareNegotiationParty"
+                    partyName="Boulware"
+                    protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol"/>
+            <partyRepItem
+                    description="Deadline-based conceder agent"
+                    classPath="negotiator.parties.ConcederNegotiationParty"
+                    partyName="Conceder"
+                    protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol"/>
+            <partyRepItem
+                    description="Simple UI party"
+                    classPath="negotiator.parties.CounterOfferHumanNegotiationParty"
+                    partyName="UI Party"
+                    protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol">
+            </partyRepItem>
+            <partyRepItem
+                    description="Random party"
+                    classPath="negotiator.parties.RandomCounterOfferNegotiationParty"
+                    partyName="Random party"
+                    protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol">
+            </partyRepItem>
+        </partyRepItems>
+        <domainRepItem/>
+        <protocolRepItem/>
+        <multiPartyProtocolRepItem/>
+    </items>
+    <filename>partyrepository.xml</filename>
+</repository>

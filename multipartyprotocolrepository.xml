@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<repository fileName="multipartyprotocolrepository.xml">
+    <items>
+        <agentRepItems/>
+        <partyRepItems/>
+        <domainRepItem/>
+        <protocolRepItem/>
+        <multiPartyProtocolRepItem>
+            <multiPartyProtocolRepItem
+                    description="Each agents makes offer, counter-offer, or accepts"
+                    classPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol"
+                    protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)"
+                    hasMediator="false"
+                    hasMediatorProfile="false" />
+        </multiPartyProtocolRepItem>
+    </items>
+    <filename>multipartyprotocolrepository.xml</filename>
+</repository>

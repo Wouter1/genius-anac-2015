@@ -1,0 +1,1 @@
+start java -cp negotiator.jar;. negotiator.Main 
