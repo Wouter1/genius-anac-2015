@@ -114,7 +114,7 @@ public class FileChooser extends FileInput{
 
 	        try{
                 super.input = new BufferedReader(new FileReader(super.pathName));
-            }catch(java.io.FileNotFoundException e){
+            }catch(FileNotFoundException e){
                 System.out.println(e);
                 super.fileFound=false;
             }

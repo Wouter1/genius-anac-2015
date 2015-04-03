@@ -1158,7 +1158,7 @@ public class KeyboardInput
 
                 try{
                         line = input.readLine();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
 

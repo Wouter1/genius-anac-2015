@@ -126,7 +126,7 @@ class G2UtilitySpace {
 		return utilities.get(issue);
 	}
 	
-	public Set<Map.Entry<String, G2Issue>> getIssues(){
+	public Set<Entry<String, G2Issue>> getIssues(){
 		return utilities.entrySet();
 	}
 }

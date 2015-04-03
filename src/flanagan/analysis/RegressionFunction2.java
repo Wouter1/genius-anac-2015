@@ -44,5 +44,5 @@ package flanagan.analysis;
 // Interface for Regression class
 // Sum of squares function for non-linear regression methods
 public interface RegressionFunction2{
-    double function(double[]param, double[] x, int i);
+    double function(double[] param, double[] x, int i);
 }

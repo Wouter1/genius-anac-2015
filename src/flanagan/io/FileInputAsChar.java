@@ -67,7 +67,7 @@ public class FileInputAsChar{
 
                 try{
                     this.input = new BufferedReader(new FileReader(this.pathName));
-                }catch(java.io.FileNotFoundException e){
+                }catch(FileNotFoundException e){
                     System.out.println(e);
                     fileFound=false;
                 }
@@ -101,7 +101,7 @@ public class FileInputAsChar{
                 char ch = '\u0000';
                 try{
                         ich = input.read();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
                 if(ich==-1){
@@ -123,7 +123,7 @@ public class FileInputAsChar{
 
                 try{
                         ich = input.read();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
                 if(ich==-1){
@@ -144,7 +144,7 @@ public class FileInputAsChar{
                 int ch = -1;
                 try{
                         ch = input.read();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
                 if(ch==-1){
@@ -159,7 +159,7 @@ public class FileInputAsChar{
             if(fileFound){
                 try{
                         input.close();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
             }

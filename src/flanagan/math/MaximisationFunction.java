@@ -34,5 +34,5 @@ package flanagan.math;
 // Calculates value of function to be maximised
 public interface MaximisationFunction{
 
-    double function(double[]param);
+    double function(double[] param);
 }

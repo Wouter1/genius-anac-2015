@@ -73,8 +73,8 @@ public class BidHistory extends LinkedList<BidHistory.Entry> {
 	 * 自分の効用値が高い順にソートされたリストを返す
 	 * @return
 	 */
-	public List<BidHistory.Entry> getSortedList() {
-		final LinkedList<BidHistory.Entry> list = new LinkedList<BidHistory.Entry>(this);
+	public List<Entry> getSortedList() {
+		final LinkedList<Entry> list = new LinkedList<Entry>(this);
 		Collections.sort(list, mUtilityComparator);
 		return list;
 	}
@@ -87,7 +87,7 @@ public class BidHistory extends LinkedList<BidHistory.Entry> {
 		return 0; // FIXME
 	}
 	
-	private Comparator<Entry> mUtilityComparator = new Comparator<BidHistory.Entry>() {
+	private Comparator<Entry> mUtilityComparator = new Comparator<Entry>() {
 		@Override
 		public int compare(Entry o1, Entry o2) {
 			return (int) Math.round((o1.utility - o2.utility)*10e5);

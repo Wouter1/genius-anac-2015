@@ -46,5 +46,5 @@ package flanagan.analysis;
 // i = index of parameter a in dy/da[i]
 
 public interface RegressionDerivativeFunction{
-    double function(double[]param, double[] x, int i);
+    double function(double[] param, double[] x, int i);
 }

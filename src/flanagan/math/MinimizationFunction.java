@@ -33,5 +33,5 @@ package flanagan.math;
 // Calculates value of function to be minimised
 public interface MinimizationFunction{
 
-    double function(double[]param);
+    double function(double[] param);
 }

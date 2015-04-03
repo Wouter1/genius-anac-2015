@@ -3,23 +3,6 @@
 	<items>
 		<agentRepItems />
 		<partyRepItems>
-			<partyRepItem description="Agent for group n" classPath="negotiator.groupn.Groupn"
-				partyName="Group n" protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-			<partyRepItem description="Deadline-based boulware agent"
-				classPath="negotiator.parties.BoulwareNegotiationParty" partyName="Boulware"
-				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-			<partyRepItem description="Deadline-based conceder agent"
-				classPath="negotiator.parties.ConcederNegotiationParty" partyName="Conceder"
-				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-			<partyRepItem description="Simple UI party"
-				classPath="negotiator.parties.CounterOfferHumanNegotiationParty"
-				partyName="UI Party" protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol">
-			</partyRepItem>
-			<partyRepItem description="Random party"
-				classPath="negotiator.parties.RandomCounterOfferNegotiationParty"
-				partyName="Random party" protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol">
-			</partyRepItem>
-
 			<!--  ANAC2015 agents -->
 			<partyRepItem description="1. Phoenix"
 				classPath="anac2015.Phoenix.PhoenixParty" partyName="ANAC2015-1-Phoenix"
@@ -27,10 +10,10 @@
 			<partyRepItem description="2. CUHK"
 				classPath="anac2015.cuhkagent2015.CUHKAgent2015" partyName="ANAC2015-2-CUHK"
 				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-			<partyRepItem description="3. Pars"
-				classPath="anac2015.ui.ParsAgent" partyName="ANAC2015-3-Pars"
+ 			<partyRepItem description="3. Pars"
+				classPath="anac2015.ParsAgent.ParsAgent" partyName="ANAC2015-3-Pars"
 				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-			<partyRepItem description="4. Ares"
+		<!--<partyRepItem description="4. Ares"
 				classPath="anac2015.AresParty.AresParty" partyName="ANAC2015-4-Ares"
 				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
 			<partyRepItem description="5. Mercury "
@@ -84,20 +67,11 @@
 			<partyRepItem description="21. Mean"
 				classPath="anac2015.meanBot.MeanBot" partyName="ANAC2015-21-Mean"
 				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-            <partyRepItem description="22. PNegotiator"
-                  classPath="anac2015.pnegotiator.PNegotiator" partyName="ANAC2015-22-PNegotiator"
-                  protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-            <partyRepItem description="23. ParsAgent"
-                  classPath="anac2015.ParsAgent.ParsAgent" partyName="ANAC2015-23-ParsAgent"
-                  protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-            <partyRepItem description="24. RandomDance"
-                  classPath="anac2015.RandomDance.RandomDance" partyName="ANAC2015-24-RandomDance"
-                  protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
-            <partyRepItem description="25. JonnyBlack"
-                  classPath="anac2015.JonnyBlack.JonnyBlack" partyName="ANAC2015-25-JonnyBlack"
-                  protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
+			<partyRepItem description="22. PNegotiator"
+				classPath="anac2015.pnegotiator.PNegotiator" partyName="ANAC2015-22-PNegotiator"
+				protocolClassPath="negotiator.protocol.AlternatingOfferCounterOfferProtocol" />
 
-
+ -->
 		</partyRepItems>
 		<domainRepItem />
 		<protocolRepItem />

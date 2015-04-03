@@ -90,7 +90,7 @@ public class FileInput{
 
                 try{
                         this.input = new BufferedReader(new FileReader(this.pathName));
-                }catch(java.io.FileNotFoundException e){
+                }catch(FileNotFoundException e){
                         System.out.println(e);
                         fileFound=false;
                 }
@@ -352,7 +352,7 @@ public class FileInput{
                 String line="";
                 try{
                         line = input.readLine();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
                if(line==null){
@@ -382,7 +382,7 @@ public class FileInput{
             if(fileFound){
                 try{
                         input.close();
-                }catch(java.io.IOException e){
+                }catch(IOException e){
                         System.out.println(e);
                 }
             }

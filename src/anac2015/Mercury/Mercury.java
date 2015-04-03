@@ -3,13 +3,12 @@ package anac2015.Mercury;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 //import negotiator.Agent;
 import negotiator.Bid;
 import negotiator.BidIterator;
-import negotiator.DeadlineType;
+import negotiator.Deadline;
 //import negotiator.Global;
 //import negotiator.SupportedNegotiationSetting;
 import negotiator.Timeline;
@@ -27,8 +26,7 @@ import negotiator.issue.ValueReal;
 import negotiator.parties.AbstractNegotiationParty;
 import negotiator.utility.UtilitySpace;
 
-
-public class Mercury extends AbstractNegotiationParty  {
+public class Mercury extends AbstractNegotiationParty {
 
 	private double totalTime;
 	private Action ActionOfOpponent = null;
@@ -59,22 +57,25 @@ public class Mercury extends AbstractNegotiationParty  {
 	private Random random;
 	private Bid maxBid = null;
 	private int myRounds = 0;
-	
-	private int numberOfParty = -1; 
-	private double acceConThres = 0.9; // when obtainning an acceptance signal, try to seal the agreement with utility discount on it own
-	//private double miniLevel = 0;
+
+	private int numberOfParty = -1;
+	private double acceConThres = 0.9; // when obtainning an acceptance signal,
+										// try to seal the agreement with
+										// utility discount on it own
+	// private double miniLevel = 0;
 	private ArrayList<Object> myParOrder = new ArrayList<Object>();
-	private boolean halfSucc = false; // if true, our offer has been accepted by one agent
-	//private double succDis = 0.9;
-	
+	private boolean halfSucc = false; // if true, our offer has been accepted by
+										// one agent
+
+	// private double succDis = 0.9;
+
 	// @override
-	public Mercury(UtilitySpace utilitySpace,
-			Map<DeadlineType, Object> deadlines, Timeline timeline,
-			long randomSeed) {
+	public Mercury(UtilitySpace utilitySpace, Deadline deadlines,
+			Timeline timeline, long randomSeed) {
 		super(utilitySpace, deadlines, timeline, randomSeed);
-		
+
 		myparty = getPartyId();
-		
+
 		try {
 			random = new Random();
 			maximumOfBid = this.utilitySpace.getDomain()
@@ -119,86 +120,94 @@ public class Mercury extends AbstractNegotiationParty  {
 	}
 
 	@Override
-	public void receiveMessage(Object sender, Action opponentAction) {	
+	public void receiveMessage(Object sender, Action opponentAction) {
 		super.receiveMessage(sender, opponentAction);
-		
-		this.ActionOfOpponent = opponentAction;		
-		this.party = sender;	
-		
-		//System.out.println("party id is" +myparty+","+sender);
-		
-		if (numberOfParty == -1){
-			numberOfParty = getNumberOfParties();	
+
+		this.ActionOfOpponent = opponentAction;
+		this.party = sender;
+
+		// System.out.println("party id is" +myparty+","+sender);
+
+		if (numberOfParty == -1) {
+			numberOfParty = getNumberOfParties();
 			opponentBidHistory.initiPartyRec(numberOfParty, this.utilitySpace);
-			//System.out.println("first informed action"+opponentAction.toString());
-		}else if (opponentAction instanceof Offer){
-				
-				if(myParOrder.size() < numberOfParty)
-					myParOrder.add(sender);
-			
-				this.opponentBidHistory.updateOpponentModel(
-						((Offer) ActionOfOpponent).getBid(), sender,
-						utilitySpace.getDomain(), this.utilitySpace);
-				
-				this.opponentBidHistory.updateOppRec(((Offer) ActionOfOpponent).getBid(), sender);
-				//System.out.println("following informed action"+opponentAction.toString());
-				
-		}else if (opponentAction instanceof Accept){
-			//	
-			//System.out.println("current informed action is accept"+opponentAction.toString());
-			//System.out.println("current informed action is accept"+myParOrder.indexOf(sender)+","+myParOrder.indexOf(myparty));
-			if(myParOrder.size() < numberOfParty)
+			// System.out.println("first informed action"+opponentAction.toString());
+		} else if (opponentAction instanceof Offer) {
+
+			if (myParOrder.size() < numberOfParty)
 				myParOrder.add(sender);
-			
-			if ( ( myParOrder.indexOf(sender)+1 ) % numberOfParty == myParOrder.indexOf(myparty) || ( myParOrder.indexOf(sender)-1 ) % numberOfParty == myParOrder.indexOf(myparty) ){
-				
-				halfSucc = true; //true
-				System.out.println("Half success action caused by "+sender+","+opponentAction.toString());
-				
+
+			this.opponentBidHistory.updateOpponentModel(
+					((Offer) ActionOfOpponent).getBid(), sender,
+					utilitySpace.getDomain(), this.utilitySpace);
+
+			this.opponentBidHistory.updateOppRec(
+					((Offer) ActionOfOpponent).getBid(), sender);
+			// System.out.println("following informed action"+opponentAction.toString());
+
+		} else if (opponentAction instanceof Accept) {
+			//
+			// System.out.println("current informed action is accept"+opponentAction.toString());
+			// System.out.println("current informed action is accept"+myParOrder.indexOf(sender)+","+myParOrder.indexOf(myparty));
+			if (myParOrder.size() < numberOfParty)
+				myParOrder.add(sender);
+
+			if ((myParOrder.indexOf(sender) + 1) % numberOfParty == myParOrder
+					.indexOf(myparty)
+					|| (myParOrder.indexOf(sender) - 1) % numberOfParty == myParOrder
+							.indexOf(myparty)) {
+
+				halfSucc = true; // true
+				System.out.println("Half success action caused by " + sender
+						+ "," + opponentAction.toString());
+
 				this.opponentBidHistory.updateOpponentModel(
 						ownBidHistory.getLastBid(), sender,
 						utilitySpace.getDomain(), this.utilitySpace);
-				
-				this.opponentBidHistory.updateAccRec(ownBidHistory.getLastBid(),sender);
-				
-			}else{
+
+				this.opponentBidHistory.updateAccRec(
+						ownBidHistory.getLastBid(), sender);
+
+			} else {
 				// only works when agents are less than 3!
-				this.opponentBidHistory.updateOpponentModel(     
+				this.opponentBidHistory.updateOpponentModel(
 						opponentBidHistory.getLastOppBid(), sender,
 						utilitySpace.getDomain(), this.utilitySpace);
-				
-				this.opponentBidHistory.updateAccRec(opponentBidHistory.getLastOppBid(),sender);
+
+				this.opponentBidHistory.updateAccRec(
+						opponentBidHistory.getLastOppBid(), sender);
 			}
-			
-		
-		}else{
+
+		} else {
 			//
-			if(myParOrder.size() < numberOfParty)
+			if (myParOrder.size() < numberOfParty)
 				myParOrder.add(sender);
-			
-			System.out.println("Unexpected action from "+sender+","+opponentAction.toString());
+
+			System.out.println("Unexpected action from " + sender + ","
+					+ opponentAction.toString());
 		}
-				
+
 	}
-		
+
 	@Override
 	public Action chooseAction(List<Class> validActions) {
 		Action action = null;
 		Bid bid = null;
 		myRounds++;
-		
-		//System.out.println("halfSucces " + halfSucc+","+myRounds+","+this.estimateRoundLeft(false)+","+estimateRoundLeft(true));
-		
-		if(myParOrder.size() < numberOfParty)
+
+		// System.out.println("halfSucces " +
+		// halfSucc+","+myRounds+","+this.estimateRoundLeft(false)+","+estimateRoundLeft(true));
+
+		if (myParOrder.size() < numberOfParty)
 			myParOrder.add(myparty);
-		
+
 		try {
 			// System.out.println("i propose " + debug + " bid at time " +
 			// timeline.getTime());
 			this.timeLeftBefore = timeline.getCurrentTime();
-			
+
 			// we propose first and propose the bid with maximum utility
-			if (!validActions.contains(Accept.class)) {		
+			if (!validActions.contains(Accept.class)) {
 				bid = this.bid_maximum_utility;
 				action = new Offer(bid);
 			} else if (ActionOfOpponent instanceof Offer) {// the opponent
@@ -206,10 +215,10 @@ public class Mercury extends AbstractNegotiationParty  {
 															// we response
 															// secondly
 				// update opponent model first
-				//this.opponentBidHistory.updateOpponentModel(
-				//		((Offer) ActionOfOpponent).getBid(),
-				//		utilitySpace.getDomain(), this.utilitySpace);			
-				
+				// this.opponentBidHistory.updateOpponentModel(
+				// ((Offer) ActionOfOpponent).getBid(),
+				// utilitySpace.getDomain(), this.utilitySpace);
+
 				this.updateConcedeDegree();
 				// update the estimation
 				if (myRounds <= 30) {
@@ -219,15 +228,15 @@ public class Mercury extends AbstractNegotiationParty  {
 					action = new Offer(bid);
 				} else {// other conditions
 					if (timeline.getTime() < 0.97) {// still have some rounds
-														// left to further
-														// negotiate (the major
-														// negotiation period)
-						if(!this.halfSucc){
+													// left to further
+													// negotiate (the major
+													// negotiation period)
+						if (!this.halfSucc) {
 							bid = BidToOffer();
-						}else{
+						} else {
 							bid = NiceBidtoOffer();
 						}
-						
+
 						Boolean IsAccept = AcceptOpponentOffer(
 								((Offer) ActionOfOpponent).getBid(), bid);
 						Boolean IsTerminate = TerminateCurrentNegotiation(bid);
@@ -235,7 +244,7 @@ public class Mercury extends AbstractNegotiationParty  {
 							action = new Accept();
 						} else if (IsTerminate && !IsAccept) {
 							action = new EndNegotiation();
-							//action = new Offer(maxBid);						
+							// action = new Offer(maxBid);
 						} else if (IsAccept && IsTerminate) {
 							if (this.utilitySpace
 									.getUtility(((Offer) ActionOfOpponent)
@@ -243,7 +252,7 @@ public class Mercury extends AbstractNegotiationParty  {
 								action = new Accept();
 							} else {
 								action = new EndNegotiation();
-								//action = new Offer(maxBid);		
+								// action = new Offer(maxBid);
 							}
 						} else {
 							// we expect that the negotiation is over once we
@@ -266,16 +275,16 @@ public class Mercury extends AbstractNegotiationParty  {
 							// proposed to us
 						// in this case, it corresponds to an opponent whose
 						// decision time is short
-						if ( timeline.getTime() > 0.995) {
+						if (timeline.getTime() > 0.995) {
 							// bid =
 							// opponentBidHistory.chooseBestFromHistory(this.utilitySpace);
-							
-								if(!this.halfSucc){
-									bid = opponentBidHistory.getBestBidInHistory();
-								}else{
-									bid = NiceBidtoOffer();
-								}
-													
+
+							if (!this.halfSucc) {
+								bid = opponentBidHistory.getBestBidInHistory();
+							} else {
+								bid = NiceBidtoOffer();
+							}
+
 							// this is specially designed to avoid that we got
 							// very low utility by searching between an
 							// acceptable range (when the domain is small)
@@ -292,24 +301,33 @@ public class Mercury extends AbstractNegotiationParty  {
 								// we have no chance to make a new proposal
 								// before the deadline
 								if (timeline.getTime() > 0.9999) {
-									//bid = opponentBidHistory.getMiniBestOpp(); // more concessive
-									
-									if (this.utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp()) > 0.5){
-										bid = opponentBidHistory.getMiniBestOpp(); // more concessive
-									} else if (this.utilitySpace.getUtility(opponentBidHistory.getBestBidInHistory()) > 0.5){
-										bid = opponentBidHistory.getBestBidInHistory(); 
-									}else{
+									// bid =
+									// opponentBidHistory.getMiniBestOpp(); //
+									// more concessive
+
+									if (this.utilitySpace
+											.getUtility(opponentBidHistory
+													.getMiniBestOpp()) > 0.5) {
+										bid = opponentBidHistory
+												.getMiniBestOpp(); // more
+																	// concessive
+									} else if (this.utilitySpace
+											.getUtility(opponentBidHistory
+													.getBestBidInHistory()) > 0.5) {
+										bid = opponentBidHistory
+												.getBestBidInHistory();
+									} else {
 										bid = ownBidHistory.getLastBid();
 									}
-									
+
 								} else {
 									bid = opponentBidHistory.ChooseBid(
 											candidateBids,
 											this.utilitySpace.getDomain());
 								}
 								if (bid == null) {
-									//bid = opponentBidHistory
-									//		.getBestBidInHistory();
+									// bid = opponentBidHistory
+									// .getBestBidInHistory();
 									bid = ownBidHistory.getLastBid();
 								}
 							}
@@ -320,7 +338,7 @@ public class Mercury extends AbstractNegotiationParty  {
 								action = new Accept();
 							} else if (IsTerminate && !IsAccept) {
 								action = new EndNegotiation();
-								//action = new Offer(maxBid);		
+								// action = new Offer(maxBid);
 							} else if (IsTerminate && IsAccept) {
 								if (this.utilitySpace
 										.getUtility(((Offer) ActionOfOpponent)
@@ -328,7 +346,7 @@ public class Mercury extends AbstractNegotiationParty  {
 									action = new Accept();
 								} else {
 									action = new EndNegotiation();
-									//action = new Offer(maxBid);		
+									// action = new Offer(maxBid);
 								}
 							} else {
 								if (this.toughAgent == true) {
@@ -347,9 +365,9 @@ public class Mercury extends AbstractNegotiationParty  {
 							// reaching the deadline before the decision is made
 							// bid = ownBidHistory.GetMinBidInHistory();//reduce
 							// the computational cost
-							if(!this.halfSucc){
+							if (!this.halfSucc) {
 								bid = opponentBidHistory.getBestBidInHistory();
-							}else{
+							} else {
 								bid = NiceBidtoOffer();
 							}
 
@@ -358,12 +376,12 @@ public class Mercury extends AbstractNegotiationParty  {
 							Boolean IsAccept = AcceptOpponentOffer(
 									((Offer) ActionOfOpponent).getBid(), bid);
 							Boolean IsTerminate = TerminateCurrentNegotiation(bid);
-							
+
 							if (IsAccept && !IsTerminate) {
 								action = new Accept();
 							} else if (IsTerminate && !IsAccept) {
 								action = new EndNegotiation();
-								//action = new Offer(maxBid);		
+								// action = new Offer(maxBid);
 							} else if (IsAccept && IsTerminate) {
 								if (this.utilitySpace
 										.getUtility(((Offer) ActionOfOpponent)
@@ -371,90 +389,88 @@ public class Mercury extends AbstractNegotiationParty  {
 									action = new Accept();
 								} else {
 									action = new EndNegotiation();
-									//action = new Offer(maxBid);		
+									// action = new Offer(maxBid);
 								}
 							} else {
 								action = new Offer(bid);
-								
+
 							}
 						}
 					}
 				}
-				
-				if (myRounds > 2){
-					if (ownBidHistory.isInsideMyBids(((Offer) ActionOfOpponent).getBid())) 
-						action = new Accept();			
-				}
-				
-			}else if (ActionOfOpponent instanceof Accept){
-				
-				//bid = opponentBidHistory.getLastAcce();
-				
-				/*try{	
-					
-					if ( this.utilitythreshold*acceConThres <=  this.utilitySpace.getUtility(opponentBidHistory.getLastOppBid()) ){
-						System.out.println("accept an offer after seeing an acceptance action with a not bad result"+ActionOfOpponent.getAgent());
+
+				if (myRounds > 2) {
+					if (ownBidHistory.isInsideMyBids(((Offer) ActionOfOpponent)
+							.getBid()))
 						action = new Accept();
-					}else{
-						
-						try{
-							
-							this.utilitythreshold = utilitySpace.getUtility(ownBidHistory.getLastBid());
-							double max = this.utilitythreshold * 1.2;
-							if(max > this.MaximumUtility)
-								max = this.MaximumUtility;
-							//double min = (this.utilitythreshold - utilitySpace.getUtility(ownBidHistory.getLastBid())) +  utilitySpace.getUtility(ownBidHistory.getLastBid());
-							double min = this.utilitythreshold * 0.95 * timeline.getTime();
-							//System.out.println("test in method NiceBidtoOffer"+this.utilitythreshold+","+max+","+min);
-							if (min < 0.5){
-								min = 0.5;
-								if(min > max)
-									max = min;
-							}
-							
-							List<Bid> candidateBids = getBidsBetweenUtility(min, max);
-							
-							Random random = new Random();
-							
-							int s =0;
-							
-							try{
-								s = random.nextInt(candidateBids.size());
-							}catch (Exception e){
-								s = 0;
-							}
-							
-							bid = candidateBids.get(s);
-						
-						}catch (Exception e){
-							System.out.println("error - 1");
-							bid = ownBidHistory.getLastBid();
-						}
-						
-						
-					}				
-					//action = new Offer(ownBidHistory.getLastBid());
-				}catch (Exception ee) {
-					action = new Accept();
-				}	*/
-				
+				}
+
+			} else if (ActionOfOpponent instanceof Accept) {
+
+				// bid = opponentBidHistory.getLastAcce();
+
+				/*
+				 * try{
+				 * 
+				 * if ( this.utilitythreshold*acceConThres <=
+				 * this.utilitySpace.getUtility
+				 * (opponentBidHistory.getLastOppBid()) ){ System.out.println(
+				 * "accept an offer after seeing an acceptance action with a not bad result"
+				 * +ActionOfOpponent.getAgent()); action = new Accept(); }else{
+				 * 
+				 * try{
+				 * 
+				 * this.utilitythreshold =
+				 * utilitySpace.getUtility(ownBidHistory.getLastBid()); double
+				 * max = this.utilitythreshold * 1.2; if(max >
+				 * this.MaximumUtility) max = this.MaximumUtility; //double min
+				 * = (this.utilitythreshold -
+				 * utilitySpace.getUtility(ownBidHistory.getLastBid())) +
+				 * utilitySpace.getUtility(ownBidHistory.getLastBid()); double
+				 * min = this.utilitythreshold * 0.95 * timeline.getTime();
+				 * //System.out.println("test in method NiceBidtoOffer"+this.
+				 * utilitythreshold+","+max+","+min); if (min < 0.5){ min = 0.5;
+				 * if(min > max) max = min; }
+				 * 
+				 * List<Bid> candidateBids = getBidsBetweenUtility(min, max);
+				 * 
+				 * Random random = new Random();
+				 * 
+				 * int s =0;
+				 * 
+				 * try{ s = random.nextInt(candidateBids.size()); }catch
+				 * (Exception e){ s = 0; }
+				 * 
+				 * bid = candidateBids.get(s);
+				 * 
+				 * }catch (Exception e){ System.out.println("error - 1"); bid =
+				 * ownBidHistory.getLastBid(); }
+				 * 
+				 * 
+				 * } //action = new Offer(ownBidHistory.getLastBid()); }catch
+				 * (Exception ee) { action = new Accept(); }
+				 */
+
 				try {
-					
-					if ( this.utilitythreshold*acceConThres <=  this.utilitySpace.getUtility(opponentBidHistory.getLastOppBid()) ){
-						System.out.println("accept an offer after seeing an acceptance action with a not bad result"+ActionOfOpponent.getAgent());
+
+					if (this.utilitythreshold * acceConThres <= this.utilitySpace
+							.getUtility(opponentBidHistory.getLastOppBid())) {
+						System.out
+								.println("accept an offer after seeing an acceptance action with a not bad result"
+										+ ActionOfOpponent.getAgent());
 						action = new Accept();
 					} else {
 						bid = BidToOffer();
-						
+
 						Boolean IsAccept = AcceptOpponentOffer(
 								((Offer) ActionOfOpponent).getBid(), bid);
 						Boolean IsTerminate = TerminateCurrentNegotiation(bid);
-						
+
 						if (IsAccept && !IsTerminate) {
 							action = new Accept();
 						} else if (IsTerminate && !IsAccept) {
 							action = new EndNegotiation();
-							//action = new Offer(maxBid);		
+							// action = new Offer(maxBid);
 						} else if (IsAccept && IsTerminate) {
 							if (this.utilitySpace
 									.getUtility(((Offer) ActionOfOpponent)
@@ -462,74 +478,85 @@ public class Mercury extends AbstractNegotiationParty  {
 								action = new Accept();
 							} else {
 								action = new EndNegotiation();
-								//action = new Offer(maxBid);		
+								// action = new Offer(maxBid);
 							}
 						} else {
-							action = new Offer(bid);				
+							action = new Offer(bid);
 						}
-						
+
 					}
-					
-				}catch (Exception e){
-					
+
+				} catch (Exception e) {
+
 				}
-				
+
 			}
 			// System.out.println("i propose " + debug + " bid at time " +
 			// timeline.getTime());
-			
-			//System.out.println("exception number - 3, Ares!"+bid);
-					
-			//if (bid != null && !ownBidHistory.isInsideMyBids(bid))
-			//	this.ownBidHistory.addBid(bid, utilitySpace);
-			
-			if (bid != null )
+
+			// System.out.println("exception number - 3, Ares!"+bid);
+
+			// if (bid != null && !ownBidHistory.isInsideMyBids(bid))
+			// this.ownBidHistory.addBid(bid, utilitySpace);
+
+			if (bid != null)
 				this.ownBidHistory.addBid(bid, utilitySpace);
-			
+
 			this.timeLeftAfter = timeline.getCurrentTime();
 			this.estimateRoundLeft(false);// update the estimation
 		} catch (Exception e) {
 			System.out.println("Exception in ChooseAction:" + e.getMessage());
 			System.out.println(estimateRoundLeft(false));
 			// action = new Accept(getAgentID()); // accept if anything goes
-			if (ActionOfOpponent instanceof Accept){
+			if (ActionOfOpponent instanceof Accept) {
 				action = new Accept();
-			} else{
+			} else {
 				System.out.println("handle exception - 1");
-				//action = new EndNegotiation(); 
-			}			
-			//action = new EndNegotiation(); // terminate if anything
-			//action = new Offer(maxBid);													// goes wrong.
+				// action = new EndNegotiation();
+			}
+			// action = new EndNegotiation(); // terminate if anything
+			// action = new Offer(maxBid); // goes wrong.
 		}
-		
+
 		if (action == null)
 			action = new Offer(maxBid);
-		
-		if ( this.discountingFactor <=0.5 && this.reservationValue >=0.45 && timeline.getTime() > 0.15)
+
+		if (this.discountingFactor <= 0.5 && this.reservationValue >= 0.45
+				&& timeline.getTime() > 0.15)
 			action = new EndNegotiation();
-			
-		if ( timeline.getCurrentTime() > timeline.getTotalTime()*1.1) {		
-			System.out.println("exception in negotiation time for Ares!"+timeline.getCurrentTime()+","+timeline.getTotalTime());
+
+		if (timeline.getCurrentTime() > timeline.getTotalTime() * 1.1) {
+			System.out
+					.println("exception in negotiation time for Ares!"
+							+ timeline.getCurrentTime() + ","
+							+ timeline.getTotalTime());
 			action = new EndNegotiation();
-			//return action;			
-		}		
-				
-		/*if (ownBidHistory.numOfBidsProposed() > 30){
-		
-			System.out.println("exception number - 2, Ares!"+opponentBidHistory.partyOrder.size()+","+opponentBidHistory.partyOrder.get(0)+","+opponentBidHistory.partyOrder.get(1));
-				
-			try{	
-			System.out.println("max opp utili, Ares!"+this.utilitySpace.getUtility(this.opponentBidHistory.getBestBidInHistory())+","
-					+this.utilitySpace.getUtility(this.opponentBidHistory.getBestOpp(this.opponentBidHistory.partyOrder.get(0)))+","
-					+this.utilitySpace.getUtility(this.opponentBidHistory.getBestOpp(this.opponentBidHistory.partyOrder.get(1))));		
-			} catch (Exception e){
-			System.out.println("exception number - 1, Ares!");
-			}
-		}*/
-		
-		return action;			
+			// return action;
+		}
+
+		/*
+		 * if (ownBidHistory.numOfBidsProposed() > 30){
+		 * 
+		 * System.out.println("exception number - 2, Ares!"+opponentBidHistory.
+		 * partyOrder
+		 * .size()+","+opponentBidHistory.partyOrder.get(0)+","+opponentBidHistory
+		 * .partyOrder.get(1));
+		 * 
+		 * try{
+		 * System.out.println("max opp utili, Ares!"+this.utilitySpace.getUtility
+		 * (this.opponentBidHistory.getBestBidInHistory())+","
+		 * +this.utilitySpace
+		 * .getUtility(this.opponentBidHistory.getBestOpp(this.
+		 * opponentBidHistory.partyOrder.get(0)))+","
+		 * +this.utilitySpace.getUtility
+		 * (this.opponentBidHistory.getBestOpp(this.
+		 * opponentBidHistory.partyOrder.get(1)))); } catch (Exception e){
+		 * System.out.println("exception number - 1, Ares!"); } }
+		 */
+
+		return action;
 	}
-	
+
 	/*
 	 * principle: randomization over those candidate bids to let the opponent
 	 * have a better model of my utility profile return the bid to be offered in
@@ -546,18 +573,24 @@ public class Mercury extends AbstractNegotiationParty  {
 			// used when the domain is very large.
 			// make concession when the domin is large
 			if (this.discountingFactor == 1 && this.maximumOfBid > 3200) {
-				//minimumOfBid = this.MaximumUtility - decreasingAmount_1;
-				
-				/*if (timeline.getTime() <= 0.68){
-					minimumOfBid = this.MaximumUtility * (1 - decreasingAmount_1 * Math.pow(timeline.getTime(),3));
-				}else if(timeline.getTime() > 0.68 && timeline.getTime() <= 0.81 ){
-					minimumOfBid = this.MaximumUtility * (1 - decreasingAmount_1*1.3*Math.pow(timeline.getTime(),2));
-				}else if (timeline.getTime() > 0.81 ){
-					minimumOfBid = this.MaximumUtility * (1 - decreasingAmount_1*(0.4+timeline.getTime()));
-				}*/
-				
-				minimumOfBid = this.MaximumUtility * 0.94 + 0.06 * this.MaximumUtility * (1 - Math.pow(timeline.getTime(),3));
-				
+				// minimumOfBid = this.MaximumUtility - decreasingAmount_1;
+
+				/*
+				 * if (timeline.getTime() <= 0.68){ minimumOfBid =
+				 * this.MaximumUtility * (1 - decreasingAmount_1 *
+				 * Math.pow(timeline.getTime(),3)); }else if(timeline.getTime()
+				 * > 0.68 && timeline.getTime() <= 0.81 ){ minimumOfBid =
+				 * this.MaximumUtility * (1 -
+				 * decreasingAmount_1*1.3*Math.pow(timeline.getTime(),2)); }else
+				 * if (timeline.getTime() > 0.81 ){ minimumOfBid =
+				 * this.MaximumUtility * (1 -
+				 * decreasingAmount_1*(0.4+timeline.getTime())); }
+				 */
+
+				minimumOfBid = this.MaximumUtility * 0.94 + 0.06
+						* this.MaximumUtility
+						* (1 - Math.pow(timeline.getTime(), 3));
+
 				// make further concession when the deadline is approaching and
 				// the domain is large
 				if (this.discountingFactor > 1 - decreasingAmount_2
@@ -604,29 +637,32 @@ public class Mercury extends AbstractNegotiationParty  {
 
 			// choose from the opponent bid history first to reduce calculation
 			// time
-			
-			/*if (halfSucc){
-				minimumOfBid = minimumOfBid * succDis * timeline.getTime();
-				this.utilitythreshold = this.utilitythreshold * succDis * timeline.getTime();
-			}*/
-						
-			//Bid bestBidOfferedByOpponent = opponentBidHistory.getBestBidInHistory();
-			/*if (halfSucc){
-				if(utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp()) > 0.51){
-					minimumOfBid = utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp())*(2-Math.pow(timeline.getTime(),2.5));
-				}else{
-					minimumOfBid = 0.51*(2-Math.pow(timeline.getTime(),2.5));
-				}
-				
-				maximumOfBid = utilitySpace.getUtility(opponentBidHistory.getLastAcce());
-				
-				if (maximumOfBid < minimumOfBid){
-					maximumOfBid = minimumOfBid*1.05;
-				}
-			}*/
-			
+
+			/*
+			 * if (halfSucc){ minimumOfBid = minimumOfBid * succDis *
+			 * timeline.getTime(); this.utilitythreshold = this.utilitythreshold
+			 * * succDis * timeline.getTime(); }
+			 */
+
+			// Bid bestBidOfferedByOpponent =
+			// opponentBidHistory.getBestBidInHistory();
+			/*
+			 * if (halfSucc){
+			 * if(utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp()) >
+			 * 0.51){ minimumOfBid =
+			 * utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp
+			 * ())*(2-Math.pow(timeline.getTime(),2.5)); }else{ minimumOfBid =
+			 * 0.51*(2-Math.pow(timeline.getTime(),2.5)); }
+			 * 
+			 * maximumOfBid =
+			 * utilitySpace.getUtility(opponentBidHistory.getLastAcce());
+			 * 
+			 * if (maximumOfBid < minimumOfBid){ maximumOfBid =
+			 * minimumOfBid*1.05; } }
+			 */
+
 			Bid bestBidOfferedByOpponent = opponentBidHistory.getMiniBestOpp();
-			
+
 			if (utilitySpace.getUtility(bestBidOfferedByOpponent) >= this.utilitythreshold
 					|| utilitySpace.getUtility(bestBidOfferedByOpponent) >= minimumOfBid) {
 				return bestBidOfferedByOpponent;
@@ -636,7 +672,7 @@ public class Mercury extends AbstractNegotiationParty  {
 
 			bidReturned = opponentBidHistory.ChooseBid(candidateBids,
 					this.utilitySpace.getDomain());
-			
+
 			if (bidReturned == null) {
 				System.out.println("no bids can be found.");
 				bidReturned = this.utilitySpace.getMaxUtilityBid();
@@ -649,34 +685,36 @@ public class Mercury extends AbstractNegotiationParty  {
 		// this.utilitythreshold + " with the value of alpha1 is  " + alpha1);
 		return bidReturned;
 	}
-	
-	private Bid NiceBidtoOffer(){
+
+	private Bid NiceBidtoOffer() {
 		Bid bid = null;
-			
-		try{
-	
-			//this.utilitythreshold = utilitySpace.getUtility(opponentBidHistory.getLastAcce());
-			double max = this.utilitythreshold*1.05;
-			//double min = utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp());
-			double min = this.utilitythreshold*0.95*timeline.getTime();
-			//System.out.println("test in method NiceBidtoOffer"+this.utilitythreshold+","+max+","+min);
-			
-			if(min < 0.5){
+
+		try {
+
+			// this.utilitythreshold =
+			// utilitySpace.getUtility(opponentBidHistory.getLastAcce());
+			double max = this.utilitythreshold * 1.05;
+			// double min =
+			// utilitySpace.getUtility(opponentBidHistory.getMiniBestOpp());
+			double min = this.utilitythreshold * 0.95 * timeline.getTime();
+			// System.out.println("test in method NiceBidtoOffer"+this.utilitythreshold+","+max+","+min);
+
+			if (min < 0.5) {
 				min = 0.5;
 			}
 			if (max < 0.5)
-				max =0.5;
-			
+				max = 0.5;
+
 			bid = genRanBid(min, max);
-			
-		}catch (Exception e){
+
+		} catch (Exception e) {
 			System.out.println("error in method NiceBidtoOffer");
 			bid = ownBidHistory.getLastBid();
 		}
-		
+
 		return bid;
 	}
-	
+
 	/*
 	 * decide whether to accept the current offer or not
 	 */
@@ -807,33 +845,35 @@ public class Mercury extends AbstractNegotiationParty  {
 
 	private int estimateRoundLeft(boolean opponent) {
 		double round;
-			
-		if (timeline.getType() == Timeline.Type.Rounds){
-			
-			//System.out.println((int)(timeline.getTotalTime() - timeline.getCurrentTime()));
-			
-			return (int)(timeline.getTotalTime() - timeline.getCurrentTime());
-		}else{
-		
-		if (opponent == true) {
-			if (this.timeLeftBefore - this.timeLeftAfter > this.maximumTimeOfOpponent) {
-				this.maximumTimeOfOpponent = this.timeLeftBefore
-						- this.timeLeftAfter;
-			}
+
+		if (timeline.getType() == Timeline.Type.Rounds) {
+
+			// System.out.println((int)(timeline.getTotalTime() -
+			// timeline.getCurrentTime()));
+
+			return (int) (timeline.getTotalTime() - timeline.getCurrentTime());
 		} else {
-			if (this.timeLeftAfter - this.timeLeftBefore > this.maximumTimeOfOwn) {
-				this.maximumTimeOfOwn = this.timeLeftAfter
-						- this.timeLeftBefore;
+
+			if (opponent == true) {
+				if (this.timeLeftBefore - this.timeLeftAfter > this.maximumTimeOfOpponent) {
+					this.maximumTimeOfOpponent = this.timeLeftBefore
+							- this.timeLeftAfter;
+				}
+			} else {
+				if (this.timeLeftAfter - this.timeLeftBefore > this.maximumTimeOfOwn) {
+					this.maximumTimeOfOwn = this.timeLeftAfter
+							- this.timeLeftBefore;
+				}
 			}
-		}
-		if (this.maximumTimeOfOpponent + this.maximumTimeOfOwn == 0) {
-			System.out.println("divided by zero exception");
-		}
-		round = (this.totalTime - timeline.getCurrentTime())
-				/ (this.maximumTimeOfOpponent + this.maximumTimeOfOwn);
-		// System.out.println("current time is " + timeline.getElapsedSeconds()
-		// + "---" + round + "----" + this.maximumTimeOfOpponent);
-		return ((int) (round));
+			if (this.maximumTimeOfOpponent + this.maximumTimeOfOwn == 0) {
+				System.out.println("divided by zero exception");
+			}
+			round = (this.totalTime - timeline.getCurrentTime())
+					/ (this.maximumTimeOfOpponent + this.maximumTimeOfOwn);
+			// System.out.println("current time is " +
+			// timeline.getElapsedSeconds()
+			// + "---" + round + "----" + this.maximumTimeOfOpponent);
+			return ((int) (round));
 		}
 	}
 
@@ -1006,9 +1046,9 @@ public class Mercury extends AbstractNegotiationParty  {
 		this.concedeToDiscountingFactor = this.minConcedeToDiscountingFactor
 				+ (1 - this.minConcedeToDiscountingFactor) * alpha;
 		this.concedeToDiscountingFactor_original = this.concedeToDiscountingFactor;
-		//System.out.println("concedeToDiscountingFactor is "
-		//		+ this.concedeToDiscountingFactor + "current time is "
-		//		+ timeline.getTime());
+		// System.out.println("concedeToDiscountingFactor is "
+		// + this.concedeToDiscountingFactor + "current time is "
+		// + timeline.getTime());
 	}
 
 	/*
@@ -1104,5 +1144,5 @@ public class Mercury extends AbstractNegotiationParty  {
 
 		return bid;
 	}
-	
+
 }

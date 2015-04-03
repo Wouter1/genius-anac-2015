@@ -3,13 +3,11 @@ package anac2015.AresParty;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
 
 import negotiator.Bid;
 import negotiator.BidIterator;
-import negotiator.DeadlineType;
+import negotiator.Deadline;
 import negotiator.Timeline;
 import negotiator.actions.Accept;
 import negotiator.actions.Action;
@@ -27,9 +25,9 @@ import negotiator.utility.UtilitySpace;
 
 /**
  * 
- * @author S.Chen & J.Hao 
+ * @author S.Chen & J.Hao
  */
-public class AresParty extends AbstractNegotiationParty  {
+public class AresParty extends AbstractNegotiationParty {
 
 	private double totalTime;
 	private Action ActionOfOpponent = null;
@@ -59,16 +57,15 @@ public class AresParty extends AbstractNegotiationParty  {
 	private double reservationValue;
 	private Random random;
 	private Bid maxBid = null;
-	
+
 	private int NoOfParty = -1;
-	
+
 	// @override
-	public AresParty(UtilitySpace utilitySpace,
-			Map<DeadlineType, Object> deadlines, Timeline timeline,
-			long randomSeed) {
+	public AresParty(UtilitySpace utilitySpace, Deadline deadlines,
+			Timeline timeline, long randomSeed) {
 		super(utilitySpace, deadlines, timeline, randomSeed);
 		myparty = getPartyId();
-		
+
 		try {
 			random = new Random();
 			maximumOfBid = this.utilitySpace.getDomain()
@@ -113,40 +110,43 @@ public class AresParty extends AbstractNegotiationParty  {
 	}
 
 	@Override
-	public void receiveMessage(Object sender, Action opponentAction) {	
+	public void receiveMessage(Object sender, Action opponentAction) {
 		super.receiveMessage(sender, opponentAction);
-		
-		this.ActionOfOpponent = opponentAction;		
-		this.party = sender;		
-		
-		if (NoOfParty == -1){
-			NoOfParty = getNumberOfParties();				
-		}else{
-				
-			if(ActionOfOpponent instanceof Offer){
-				//Bid partnerBid = ((Offer) ActionOfOpponent).getBid();
-				//double offeredUtilFromOpponent = getUtility(partnerBid);
-								
+
+		this.ActionOfOpponent = opponentAction;
+		this.party = sender;
+
+		if (NoOfParty == -1) {
+			NoOfParty = getNumberOfParties();
+		} else {
+
+			if (ActionOfOpponent instanceof Offer) {
+				// Bid partnerBid = ((Offer) ActionOfOpponent).getBid();
+				// double offeredUtilFromOpponent = getUtility(partnerBid);
+
 				this.opponentBidHistory.updateOpponentModel(
 						((Offer) ActionOfOpponent).getBid(),
 						utilitySpace.getDomain(), this.utilitySpace);
 
-		}else if (ActionOfOpponent instanceof Accept){
-			//receive an accept from an opponent over an offer, which may not be ours.
-			
-			/*this.opponentBidHistory.updateOpponentModel(
-					ownBidHistory.getLastBid(), 
-					utilitySpace.getDomain(), this.utilitySpace);*/
-			
-		}else{
-			//
-			System.out.println("unexpected action");
+			} else if (ActionOfOpponent instanceof Accept) {
+				// receive an accept from an opponent over an offer, which may
+				// not be ours.
+
+				/*
+				 * this.opponentBidHistory.updateOpponentModel(
+				 * ownBidHistory.getLastBid(), utilitySpace.getDomain(),
+				 * this.utilitySpace);
+				 */
+
+			} else {
+				//
+				System.out.println("unexpected action");
+			}
+
 		}
-		
-		}
-		
+
 	}
-	
+
 	@Override
 	public Action chooseAction(List<Class> validActions) {
 		Action action = null;
@@ -186,16 +186,16 @@ public class AresParty extends AbstractNegotiationParty  {
 						if (IsAccept && !IsTerminate) {
 							action = new Accept();
 						} else if (IsTerminate && !IsAccept) {
-							//action = new EndNegotiation();
-							action = new Offer(maxBid);						
+							// action = new EndNegotiation();
+							action = new Offer(maxBid);
 						} else if (IsAccept && IsTerminate) {
 							if (this.utilitySpace
 									.getUtility(((Offer) ActionOfOpponent)
 											.getBid()) > this.reservationValue) {
 								action = new Accept();
 							} else {
-								//action = new EndNegotiation();
-								action = new Offer(maxBid);		
+								// action = new EndNegotiation();
+								action = new Offer(maxBid);
 							}
 						} else {
 							// we expect that the negotiation is over once we
@@ -218,7 +218,7 @@ public class AresParty extends AbstractNegotiationParty  {
 							// proposed to us
 						// in this case, it corresponds to an opponent whose
 						// decision time is short
-						if ( timeline.getTime() > 0.9985
+						if (timeline.getTime() > 0.9985
 								&& estimateRoundLeft(true) < 5) {
 							// bid =
 							// opponentBidHistory.chooseBestFromHistory(this.utilitySpace);
@@ -258,16 +258,16 @@ public class AresParty extends AbstractNegotiationParty  {
 							if (IsAccept && !IsTerminate) {
 								action = new Accept();
 							} else if (IsTerminate && !IsAccept) {
-								//action = new EndNegotiation();
-								action = new Offer(maxBid);		
+								// action = new EndNegotiation();
+								action = new Offer(maxBid);
 							} else if (IsTerminate && IsAccept) {
 								if (this.utilitySpace
 										.getUtility(((Offer) ActionOfOpponent)
 												.getBid()) > this.reservationValue) {
 									action = new Accept();
 								} else {
-									//action = new EndNegotiation();
-									action = new Offer(maxBid);		
+									// action = new EndNegotiation();
+									action = new Offer(maxBid);
 								}
 							} else {
 								if (this.toughAgent == true) {
@@ -296,16 +296,16 @@ public class AresParty extends AbstractNegotiationParty  {
 							if (IsAccept && !IsTerminate) {
 								action = new Accept();
 							} else if (IsTerminate && !IsAccept) {
-								//action = new EndNegotiation();
-								action = new Offer(maxBid);		
+								// action = new EndNegotiation();
+								action = new Offer(maxBid);
 							} else if (IsAccept && IsTerminate) {
 								if (this.utilitySpace
 										.getUtility(((Offer) ActionOfOpponent)
 												.getBid()) > this.reservationValue) {
 									action = new Accept();
 								} else {
-									//action = new EndNegotiation();
-									action = new Offer(maxBid);		
+									// action = new EndNegotiation();
+									action = new Offer(maxBid);
 								}
 							} else {
 								action = new Offer(bid);
@@ -316,35 +316,38 @@ public class AresParty extends AbstractNegotiationParty  {
 						}
 					}
 				}
-			}else if (ActionOfOpponent instanceof Accept){
-						
-				try{	
-					if ( this.utilitythreshold <=  ((1-this.discountingFactor)*0.1+1.05) * this.utilitySpace.getUtility( opponentBidHistory.getLastOppBid()) ){
-						System.out.println("accept an offer after seeing an acceptance action with a not bad result"+ActionOfOpponent.getAgent());
+			} else if (ActionOfOpponent instanceof Accept) {
+
+				try {
+					if (this.utilitythreshold <= ((1 - this.discountingFactor) * 0.1 + 1.05)
+							* this.utilitySpace.getUtility(opponentBidHistory
+									.getLastOppBid())) {
+						System.out
+								.println("accept an offer after seeing an acceptance action with a not bad result"
+										+ ActionOfOpponent.getAgent());
 						action = new Accept();
 					}
-				}catch (Exception e){
-				
-				}	
-				
+				} catch (Exception e) {
+
+				}
+
 				bid = BidToOffer();
-			
+
 				Boolean IsAccept = AcceptOpponentOffer(
 						((Offer) ActionOfOpponent).getBid(), bid);
 				Boolean IsTerminate = TerminateCurrentNegotiation(bid);
 				if (IsAccept && !IsTerminate) {
 					action = new Accept();
 				} else if (IsTerminate && !IsAccept) {
-					//action = new EndNegotiation();
-					action = new Offer(maxBid);		
+					// action = new EndNegotiation();
+					action = new Offer(maxBid);
 				} else if (IsAccept && IsTerminate) {
-					if (this.utilitySpace
-							.getUtility(((Offer) ActionOfOpponent)
-									.getBid()) > this.reservationValue) {
+					if (this.utilitySpace.getUtility(((Offer) ActionOfOpponent)
+							.getBid()) > this.reservationValue) {
 						action = new Accept();
 					} else {
-						//action = new EndNegotiation();
-						action = new Offer(maxBid);		
+						// action = new EndNegotiation();
+						action = new Offer(maxBid);
 					}
 				} else {
 					action = new Offer(bid);
@@ -355,10 +358,10 @@ public class AresParty extends AbstractNegotiationParty  {
 			}
 			// System.out.println("i propose " + debug + " bid at time " +
 			// timeline.getTime());
-			
+
 			if (bid != null)
 				this.ownBidHistory.addBid(bid, utilitySpace);
-			
+
 			this.timeLeftAfter = timeline.getCurrentTime();
 			this.estimateRoundLeft(false);// update the estimation
 		} catch (Exception e) {
@@ -366,24 +369,28 @@ public class AresParty extends AbstractNegotiationParty  {
 			System.out.println(estimateRoundLeft(false));
 			// action = new Accept(getAgentID()); // accept if anything goes
 			// wrong.
-			//action = new EndNegotiation(); // terminate if anything
-			action = new Offer(maxBid);													// goes wrong.
+			// action = new EndNegotiation(); // terminate if anything
+			action = new Offer(maxBid); // goes wrong.
 		}
-		
-		if ( this.discountingFactor <=0.5 && this.reservationValue >=0.4 && timeline.getTime() > 0.1)
+
+		if (this.discountingFactor <= 0.5 && this.reservationValue >= 0.4
+				&& timeline.getTime() > 0.1)
 			action = new EndNegotiation();
-			
-		if ( timeline.getCurrentTime() > timeline.getTotalTime()*1.1) {		
-			System.out.println("exception in negotiation time for Ares!"+timeline.getCurrentTime()+","+timeline.getTotalTime());
-			action = new EndNegotiation();			
+
+		if (timeline.getCurrentTime() > timeline.getTotalTime() * 1.1) {
+			System.out
+					.println("exception in negotiation time for Ares!"
+							+ timeline.getCurrentTime() + ","
+							+ timeline.getTotalTime());
+			action = new EndNegotiation();
 		}
-		
+
 		if (action == null)
 			action = new Offer(maxBid);
-		
-		return action;			
+
+		return action;
 	}
-	
+
 	/*
 	 * principle: randomization over those candidate bids to let the opponent
 	 * have a better model of my utility profile return the bid to be offered in
@@ -781,7 +788,7 @@ public class AresParty extends AbstractNegotiationParty  {
 		// between concede-to-time degree and discouting factor)
 		if (this.discountingFactor > 0.9) {
 			beta = 1.9;
-		}else if (this.discountingFactor > 0.75) {
+		} else if (this.discountingFactor > 0.75) {
 			beta = 1.85;
 		} else if (this.discountingFactor > 0.5) {
 			beta = 1.45;
@@ -823,6 +830,4 @@ public class AresParty extends AbstractNegotiationParty  {
 		// this.concedeToDiscountingFactor_original);
 	}
 
-	
-	
 }
