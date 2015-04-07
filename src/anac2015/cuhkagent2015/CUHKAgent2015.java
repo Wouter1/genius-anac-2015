@@ -482,9 +482,12 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			// timeline.getTime());
 			this.ownBidHistory.addBid(bid, utilitySpace);
 			this.timeLeftAfter = timeline.getCurrentTime();
-			this.estimateRoundLeft(false);// update the estimation
-			// System.out.println(this.utilitythreshold + "-***-----" +
-			// this.timeline.getElapsedSeconds());
+			if (this.timeLeftAfter - this.timeLeftBefore > this.maximumTimeOfOwn) {
+				this.maximumTimeOfOwn = this.timeLeftAfter
+						- this.timeLeftBefore;
+			}// update the estimation
+				// System.out.println(this.utilitythreshold + "-***-----" +
+				// this.timeline.getElapsedSeconds());
 			if (debug) {
 				try {
 					SysOut = System.out;
@@ -667,97 +670,94 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 	 * decide whether to accept the current offer or not
 	 */
 	private boolean AcceptOpponentOffer(Bid opponentBid, Bid ownBid) {
-		double currentUtility = 0;
-		double nextRoundUtility = 0;
-		double maximumUtility = 0;
-		this.concedeToOpponent = false;
 		try {
+			double currentUtility = 0;
+			double nextRoundUtility = 0;
+			double maximumUtility = 0;
+			this.concedeToOpponent = false;
 			currentUtility = this.utilitySpace.getUtility(opponentBid);
 			maximumUtility = this.MaximumUtility;// utilitySpace.getUtility(utilitySpace.getMaxUtilityBid());
-		} catch (Exception e) {
-			System.out.println(e.getMessage()
-					+ "Exception in method AcceptOpponentOffer part 1");
-			this.except = 5;
-		}
-		try {
 			nextRoundUtility = this.utilitySpace.getUtility(ownBid);
-		} catch (Exception e) {
-			System.out.println(e.getMessage()
-					+ "Exception in method AcceptOpponentOffer part 2");
-			this.except = 6;
-		}
-		// System.out.println(this.utilitythreshold +"at time "+
-		// timeline.getTime());
-		if (currentUtility >= this.AvgUtilitythreshold
-				|| currentUtility >= nextRoundUtility) {
-			return true;
-		} else {
-			// if the current utility with discount is larger than the predicted
-			// maximum utility with discount
-			// then accept it.
-			double predictMaximumUtility = maximumUtility
-					* this.discountingFactor;
-			// double currentMaximumUtility =
-			// this.utilitySpace.getUtilityWithDiscount(opponentBidHistory.chooseBestFromHistory(utilitySpace),
-			// timeline);
-			double currentMaximumUtility1 = this.utilitySpace
-					.getUtilityWithDiscount(
-							opponentBidHistory1.getBestBidInHistory(), timeline);
-			double currentMaximumUtility2 = this.utilitySpace
-					.getUtilityWithDiscount(
-							opponentBidHistory2.getBestBidInHistory(), timeline);
-			double currentMaximumUtility = Math.min(currentMaximumUtility1,
-					currentMaximumUtility2);
-			if (currentMaximumUtility > predictMaximumUtility
-					&& timeline.getTime() > this.AvgConcedeTime) {
-				try {
-					// if the current offer is approximately as good as the best
-					// one in the history, then accept it.
-					if (utilitySpace.getUtilityWithDiscount(opponentBid,
-							timeline) >= currentMaximumUtility - 0.01) {
-						System.out
-								.println("he offered me "
-										+ currentMaximumUtility
-										+ " we predict we can get at most "
-										+ predictMaximumUtility
-										+ "we concede now to avoid lower payoff due to conflict");
-						return true;
-					} else {
-						this.concedeToOpponent = true;
-						return false;
-					}
-				} catch (Exception e) {
-					System.out
-							.println("exception in Method AcceptOpponentOffer");
-					this.except = 7;
-					return true;
-				}
-				// retrieve the opponent's biding history and utilize it
-			} else if (currentMaximumUtility > this.AvgUtilitythreshold
-					* Math.pow(this.discountingFactor, timeline.getTime())) {
-				try {
-					// if the current offer is approximately as good as the best
-					// one in the history, then accept it.
-					if (utilitySpace.getUtilityWithDiscount(opponentBid,
-							timeline) >= currentMaximumUtility - 0.01) {
-						return true;
-					} else {
-						System.out.println("test"
-								+ utilitySpace.getUtility(opponentBid)
-								+ this.AvgUtilitythreshold);
-						this.concedeToOpponent = true;
-						return false;
-					}
-				} catch (Exception e) {
-					System.out
-							.println("exception in Method AcceptOpponentOffer");
-					this.except = 8;
-					return true;
-				}
+
+			// System.out.println(this.utilitythreshold +"at time "+
+			// timeline.getTime());
+			if (currentUtility >= this.AvgUtilitythreshold
+					|| currentUtility >= nextRoundUtility) {
+				return true;
 			} else {
-				return false;
+				// if the current utility with discount is larger than the
+				// predicted maximum utility with discount
+				// then accept it.
+				double predictMaximumUtility = maximumUtility
+						* this.discountingFactor;
+				// double currentMaximumUtility =
+				// this.utilitySpace.getUtilityWithDiscount(opponentBidHistory.chooseBestFromHistory(utilitySpace),
+				// timeline);
+				double currentMaximumUtility1 = this.utilitySpace
+						.getUtilityWithDiscount(
+								opponentBidHistory1.getBestBidInHistory(),
+								timeline);
+				double currentMaximumUtility2 = this.utilitySpace
+						.getUtilityWithDiscount(
+								opponentBidHistory2.getBestBidInHistory(),
+								timeline);
+				double currentMaximumUtility = Math.min(currentMaximumUtility1,
+						currentMaximumUtility2);
+				if (currentMaximumUtility > predictMaximumUtility
+						&& timeline.getTime() > this.AvgConcedeTime) {
+					try {
+						// if the current offer is approximately as good as the
+						// best one in the history, then accept it.
+						if (utilitySpace.getUtilityWithDiscount(opponentBid,
+								timeline) >= currentMaximumUtility - 0.01) {
+							System.out
+									.println("he offered me "
+											+ currentMaximumUtility
+											+ " we predict we can get at most "
+											+ predictMaximumUtility
+											+ "we concede now to avoid lower payoff due to conflict");
+							return true;
+						} else {
+							this.concedeToOpponent = true;
+							return false;
+						}
+					} catch (Exception e) {
+						System.out
+								.println("exception in Method AcceptOpponentOffer");
+						this.except = 7;
+						return true;
+					}
+					// retrieve the opponent's biding history and utilize it
+				} else if (currentMaximumUtility > this.AvgUtilitythreshold
+						* Math.pow(this.discountingFactor, timeline.getTime())) {
+					try {
+						// if the current offer is approximately as good as the
+						// best one in the history, then accept it.
+						if (utilitySpace.getUtilityWithDiscount(opponentBid,
+								timeline) >= currentMaximumUtility - 0.01) {
+							return true;
+						} else {
+							System.out.println("test"
+									+ utilitySpace.getUtility(opponentBid)
+									+ this.AvgUtilitythreshold);
+							this.concedeToOpponent = true;
+							return false;
+						}
+					} catch (Exception e) {
+						System.out
+								.println("exception in Method AcceptOpponentOffer");
+						this.except = 8;
+						return true;
+					}
+				} else {
+					return false;
+				}
 			}
+		} catch (Exception e) {
+			System.out.println("exception in Method AcceptOpponentOffer");
+			return true;
 		}
+
 	}
 
 	/*
@@ -772,34 +772,35 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			currentUtility = this.reservationValue;
 			nextRoundUtility = this.utilitySpace.getUtility(ownBid);
 			maximumUtility = this.MaximumUtility;
-		} catch (Exception e) {
-			System.out.println(e.getMessage()
-					+ "Exception in method TerminateCurrentNegotiation part 1");
-			this.except = 9;
-		}
 
-		if (this.discountingFactor == 1 || this.reservationValue == 0) {
-			return false;
-		}
-
-		if (currentUtility >= nextRoundUtility) {
-			return true;
-		} else {
-			// if the current reseravation utility with discount is larger than
-			// the predicted maximum utility with discount
-			// then terminate the negotiation.
-			double predictMaximumUtility = maximumUtility
-					* this.discountingFactor;
-			double currentMaximumUtility = this.utilitySpace
-					.getReservationValueWithDiscount(timeline);
-			// System.out.println("the current reserved value is "+
-			// this.reservationValue+" after discounting is "+currentMaximumUtility);
-			if (currentMaximumUtility > predictMaximumUtility
-					&& timeline.getTime() > this.AvgConcedeTime) {
-				return true;
-			} else {
+			if (this.discountingFactor == 1 || this.reservationValue == 0) {
 				return false;
 			}
+
+			if (currentUtility >= nextRoundUtility) {
+				return true;
+			} else {
+				// if the current reseravation utility with discount is larger
+				// than the predicted maximum utility with discount
+				// then terminate the negotiation.
+				double predictMaximumUtility = maximumUtility
+						* this.discountingFactor;
+				double currentMaximumUtility = this.utilitySpace
+						.getReservationValueWithDiscount(timeline);
+				// System.out.println("the current reserved value is "+
+				// this.reservationValue+" after discounting is "+currentMaximumUtility);
+				if (currentMaximumUtility > predictMaximumUtility
+						&& timeline.getTime() > this.AvgConcedeTime) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage()
+					+ "Exception in method TerminateCurrentNegotiation");
+			this.except = 9;
+			return true;
 		}
 	}
 
@@ -809,25 +810,34 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 	 */
 	private int estimateRoundLeft(boolean opponent) {
 		double round;
-		if (opponent == true) {
-			if (this.timeLeftBefore - this.timeLeftAfter > this.maximumTimeOfOpponent) {
-				this.maximumTimeOfOpponent = this.timeLeftBefore
-						- this.timeLeftAfter;
+		try {
+			if (opponent == true) {
+				if (this.timeLeftBefore - this.timeLeftAfter > this.maximumTimeOfOpponent) {
+					this.maximumTimeOfOpponent = this.timeLeftBefore
+							- this.timeLeftAfter;
+				}
+			} else {
+				if (this.timeLeftAfter - this.timeLeftBefore > this.maximumTimeOfOwn) {
+					this.maximumTimeOfOwn = this.timeLeftAfter
+							- this.timeLeftBefore;
+				}
 			}
-		} else {
-			if (this.timeLeftAfter - this.timeLeftBefore > this.maximumTimeOfOwn) {
-				this.maximumTimeOfOwn = this.timeLeftAfter
-						- this.timeLeftBefore;
+			if (this.maximumTimeOfOpponent + this.maximumTimeOfOwn == 0) {
+				System.out.println("divided by zero exception");
+
+				this.except = 10;
 			}
+			round = (this.totalTime - timeline.getCurrentTime())
+					/ (this.maximumTimeOfOpponent + this.maximumTimeOfOwn);
+			// System.out.println("current time is " +
+			// timeline.getElapsedSeconds() + "---" + round + "----" +
+			// this.maximumTimeOfOpponent);
+		} catch (Exception e) {
+			System.out.println(e.getMessage()
+					+ "Exception in method TerminateCurrentNegotiation");
+			this.except = 9;
+			return 20;
 		}
-		if (this.maximumTimeOfOpponent + this.maximumTimeOfOwn == 0) {
-			System.out.println("divided by zero exception");
-			this.except = 10;
-		}
-		round = (this.totalTime - timeline.getCurrentTime())
-				/ (this.maximumTimeOfOpponent + this.maximumTimeOfOwn);
-		// System.out.println("current time is " + timeline.getElapsedSeconds()
-		// + "---" + round + "----" + this.maximumTimeOfOpponent);
 		return ((int) (round));
 	}
 
@@ -951,30 +961,35 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 	 * determine concede-to-time degree based on the discounting factor.
 	 */
 	private void chooseConcedeToDiscountingDegree() {
-		double alpha = 0;
-		double beta = 1.5;// 1.3;//this value controls the rate at which the
-							// agent concedes to the discouting factor.
-		// the larger beta is, the more the agent makes concesions.
-		// if (utilitySpace.getDomain().getNumberOfPossibleBids() > 100) {
-		/*
-		 * if (this.maximumOfBid > 100) { beta = 2;//1.3; } else { beta = 1.5; }
-		 */
-		// the vaule of beta depends on the discounting factor (trade-off
-		// between concede-to-time degree and discouting factor)
-		if (this.discountingFactor > 0.75) {
-			beta = 1.8;
-		} else if (this.discountingFactor > 0.5) {
-			beta = 1.5;
-		} else {
-			beta = 1.2;
+		try {
+			double alpha = 0;
+			double beta = 1.5;// 1.3;//this value controls the rate at which the
+								// agent concedes to the discouting factor.
+			// the larger beta is, the more the agent makes concesions.
+			// if (utilitySpace.getDomain().getNumberOfPossibleBids() > 100) {
+			/*
+			 * if (this.maximumOfBid > 100) { beta = 2;//1.3; } else { beta =
+			 * 1.5; }
+			 */
+			// the vaule of beta depends on the discounting factor (trade-off
+			// between concede-to-time degree and discouting factor)
+			if (this.discountingFactor > 0.75) {
+				beta = 1.8;
+			} else if (this.discountingFactor > 0.5) {
+				beta = 1.5;
+			} else {
+				beta = 1.2;
+			}
+			alpha = Math.pow(this.discountingFactor, beta);
+			this.AvgConcedeTime = this.minConcedeTime
+					+ (1 - this.minConcedeTime) * alpha;
+			this.concedeTime_original = this.AvgConcedeTime;
+			// System.out.println("concedeToDiscountingFactor is " +
+			// this.AvgConcedeTime + "current time is " + timeline.getTime());
+		} catch (Exception e) {
+			System.out
+					.println("Exception in method chooseConcedeToDiscountingDegree");
 		}
-		alpha = Math.pow(this.discountingFactor, beta);
-		this.AvgConcedeTime = this.minConcedeTime + (1 - this.minConcedeTime)
-				* alpha;
-		this.concedeTime_original = this.AvgConcedeTime;
-		System.out
-				.println("concedeToDiscountingFactor is " + this.AvgConcedeTime
-						+ "current time is " + timeline.getTime());
 	}
 
 	/*
@@ -1048,12 +1063,14 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 							}
 						}
 					} else {
-						ans = Bids.get((int) Math.random() * Bids.size());
+						ans = Bids.get((int) (Math.random() * Bids.size()));
 					}
 				}
 			}
 		} catch (Exception e) {
+			System.out.println("Exception in method regeneratebid");
 			this.except = 17;
+			ans = this.bid_maximum_utility;
 		}
 		return ans;
 
@@ -1112,6 +1129,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			}
 			return distance;
 		} catch (Exception e) {
+			System.out.println("Exception in method calculatedistance");
 			this.except = 19;
 			return 999;
 		}
@@ -1152,6 +1170,8 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 				this.concedeTime_Agent2 = 1;
 			}
 		} catch (Exception e) {
+			System.out
+					.println("Exception in method updateConcedeDegree_smallDiscountingFactor");
 			this.except = 20;
 		}
 		// System.out.println("concedeToDiscountingFactor is " +
@@ -1185,7 +1205,8 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			}
 		} catch (Exception e) {
 			this.except = 23;
-			System.out.println("concedeTime_Agent2 exception");
+			System.out
+					.println("updateConcedeDegree_largeDiscountingFactor_Agent1 exception");
 		}
 	}
 
@@ -1214,7 +1235,8 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			}
 		} catch (Exception e) {
 			this.except = 23;
-			System.out.println("concedeTime_Agent2 exception");
+			System.out
+					.println("updateConcedeDegree_largeDiscountingFactor_Agent2 exception");
 		}
 	}
 
@@ -1228,7 +1250,8 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.concedeTime_Agent1 = 1;
 		} catch (Exception e) {
 			this.except = 25;
-			System.out.println("ConcedeTime exception");
+			System.out
+					.println("updateConcedeDegree_nonDiscountingFactor_Agent1 exception");
 		}
 	}
 
@@ -1242,20 +1265,21 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.concedeTime_Agent2 = 1;
 		} catch (Exception e) {
 			this.except = 25;
-			System.out.println("ConcedeTime exception");
+			System.out
+					.println("updateConcedeDegree_nonDiscountingFactor_Agent2 exception");
 		}
 	}
 
 	private void CalculateMinThreshold_Agent1() {
 		try {
 			ArrayList<Double> bidsUtil = new ArrayList();
-			this.CalculateSumAndCount_Agent1(bidsUtil);
+			bidsUtil = this.CalculateSumAndCount_Agent1(bidsUtil);
 
 			this.relavgUtility_Agent1 = this.relsumUtility_Agent1
 					/ this.relcountUtility_Agent1;
 
 			for (Iterator f = bidsUtil.iterator(); f.hasNext();) {
-				double bidUtil = ((Double) f.next()).doubleValue();
+				double bidUtil = (Double) f.next();
 
 				if (bidUtil >= this.oppFirstBidUtility_Agent1) {
 					this.relSqRootOfAvgUtility_Agent1 += (bidUtil - this.relavgUtility_Agent1)
@@ -1269,7 +1293,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			if (this.relstdevUtility_Agent1 < 0.1) {
 				this.relSqRootOfAvgUtility_Agent1 = 0;
 				for (Iterator g = bidsUtil.iterator(); g.hasNext();) {
-					double bidUtil = ((Double) g.next()).doubleValue();
+					double bidUtil = (Double) g.next();
 
 					if (bidUtil >= this.oppFirstBidUtility_Agent1
 							&& (bidUtil < (this.relavgUtility_Agent1 - this.relstdevUtility_Agent1) || bidUtil > (this.relavgUtility_Agent1 + this.relstdevUtility_Agent1))) {
@@ -1294,20 +1318,20 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.Compare_MinThreshold_And_SecondMax_Agent1();
 		} catch (Exception e) {
 			System.out.println(e.getMessage()
-					+ "exception in method CalculateMinThreshold");
+					+ "exception in method CalculateMinThreshold_Agent1");
 		}
 	}
 
 	private void CalculateMinThreshold_Agent2() {
 		try {
 			ArrayList<Double> bidsUtil = new ArrayList();
-			this.CalculateSumAndCount_Agent2(bidsUtil);
+			bidsUtil = this.CalculateSumAndCount_Agent2(bidsUtil);
 
 			this.relavgUtility_Agent2 = this.relsumUtility_Agent2
 					/ this.relcountUtility_Agent2;
 
 			for (Iterator f = bidsUtil.iterator(); f.hasNext();) {
-				double bidUtil = ((Double) f.next()).doubleValue();
+				double bidUtil = (Double) f.next();
 
 				if (bidUtil >= this.oppFirstBidUtility_Agent2) {
 					this.relSqRootOfAvgUtility_Agent2 += (bidUtil - this.relavgUtility_Agent2)
@@ -1321,7 +1345,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			if (this.relstdevUtility_Agent2 < 0.1) {
 				this.relSqRootOfAvgUtility_Agent2 = 0;
 				for (Iterator g = bidsUtil.iterator(); g.hasNext();) {
-					double bidUtil = ((Double) g.next()).doubleValue();
+					double bidUtil = (Double) g.next();
 
 					if (bidUtil >= this.oppFirstBidUtility_Agent2
 							&& (bidUtil < (this.relavgUtility_Agent2 - this.relstdevUtility_Agent2) || bidUtil > (this.relavgUtility_Agent2 + this.relstdevUtility_Agent2))) {
@@ -1346,7 +1370,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.Compare_MinThreshold_And_SecondMax_Agent2();
 		} catch (Exception e) {
 			System.out.println(e.getMessage()
-					+ "exception in method CalculateMinThreshold");
+					+ "exception in method CalculateMinThreshold_Agent2");
 		}
 	}
 
@@ -1362,7 +1386,8 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 		}
 	}
 
-	private void CalculateSumAndCount_Agent1(ArrayList<Double> bidsUtil) {
+	private ArrayList<Double> CalculateSumAndCount_Agent1(
+			ArrayList<Double> bidsUtil) {
 		try {
 			this.oppFirstBidUtility_Agent1 = utilitySpace
 					.getUtility(this.oppFirstBid_Agent1);
@@ -1377,7 +1402,10 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 					bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
 							.next()));
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out
+							.println(e.getMessage()
+									+ "exception in method CalculateSumAndCount_Agent1");
+					return null;
 				}
 			}
 			this.relavgUtility_Agent1 = 0;
@@ -1388,7 +1416,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.minThreshold_Agent1 = 0;
 
 			for (Iterator e = bidsUtil.iterator(); e.hasNext();) {
-				double bidUtil = ((Double) e.next()).doubleValue();
+				double bidUtil = (Double) e.next();
 				if (this.utility_FirstMaximum_Agent1 < bidUtil) {
 					this.utility_FirstMaximum_Agent1 = bidUtil;
 				} else if (utility_SecondMaximum_Agent1 < bidUtil) {
@@ -1400,13 +1428,18 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 					this.relcountUtility_Agent1 += 1;
 				}
 			}
+
+			return bidsUtil;
 		} catch (Exception e) {
 			System.out.println(e.getMessage()
-					+ "exception in method CalculateSumAndCount");
+					+ "exception in method CalculateSumAndCount_Agent1");
 		}
+
+		return null;
 	}
 
-	private void CalculateSumAndCount_Agent2(ArrayList<Double> bidsUtil) {
+	private ArrayList<Double> CalculateSumAndCount_Agent2(
+			ArrayList<Double> bidsUtil) {
 		try {
 			this.oppFirstBidUtility_Agent2 = utilitySpace
 					.getUtility(this.oppFirstBid_Agent2);
@@ -1417,12 +1450,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			BidIterator myBidIterator = new BidIterator(
 					this.utilitySpace.getDomain());
 			for (; myBidIterator.hasNext();) {
-				try {
-					bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
-							.next()));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				bidsUtil.add(this.utilitySpace.getUtility(myBidIterator.next()));
 			}
 			this.relavgUtility_Agent2 = 0;
 			this.relsumUtility_Agent2 = 0;
@@ -1432,7 +1460,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			this.minThreshold_Agent2 = 0;
 
 			for (Iterator e = bidsUtil.iterator(); e.hasNext();) {
-				double bidUtil = ((Double) e.next()).doubleValue();
+				double bidUtil = (Double) e.next();
 				if (this.utility_FirstMaximum_Agent2 < bidUtil) {
 					this.utility_FirstMaximum_Agent2 = bidUtil;
 				} else if (utility_SecondMaximum_Agent2 < bidUtil) {
@@ -1444,9 +1472,12 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 					this.relcountUtility_Agent2 += 1;
 				}
 			}
+
+			return bidsUtil;
 		} catch (Exception e) {
 			System.out.println(e.getMessage()
-					+ "exception in method CalculateSumAndCount");
+					+ "exception in method CalculateSumAndCount_Agent2");
+			return null;
 		}
 	}
 
@@ -1485,15 +1516,11 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 				BidIterator myBidIterator = new BidIterator(
 						this.utilitySpace.getDomain());
 				for (; myBidIterator.hasNext();) {
-					try {
-						bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
-								.next()));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
+							.next()));
 				}
 				for (Iterator e = bidsUtil.iterator(); e.hasNext();) {
-					double bidUtil = ((Double) e.next()).doubleValue();
+					double bidUtil = (Double) e.next();
 					if (bidUtil >= this.midPointOfSlopeSessionMax1_Agent1) {
 						this.relcountUpperBoundMid1_Agent1 += 1;
 					} else {
@@ -1513,8 +1540,9 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 				this.startConcede_Agent1 = true;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage()
-					+ "exception in method CalculateConcedePartOfOppBehaviour");
+			System.out
+					.println(e.getMessage()
+							+ "exception in method MeasureConcedePartOfOppBehaviour_Agent1");
 		}
 	}
 
@@ -1553,15 +1581,11 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 				BidIterator myBidIterator = new BidIterator(
 						this.utilitySpace.getDomain());
 				for (; myBidIterator.hasNext();) {
-					try {
-						bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
-								.next()));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					bidsUtil.add(this.utilitySpace.getUtility(myBidIterator
+							.next()));
 				}
 				for (Iterator e = bidsUtil.iterator(); e.hasNext();) {
-					double bidUtil = ((Double) e.next()).doubleValue();
+					double bidUtil = (Double) e.next();
 					if (bidUtil >= this.midPointOfSlopeSessionMax1_Agent2) {
 						this.relcountUpperBoundMid1_Agent2 += 1;
 					} else {
@@ -1581,8 +1605,9 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 				this.startConcede_Agent2 = true;
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage()
-					+ "exception in method CalculateConcedePartOfOppBehaviour");
+			System.out
+					.println(e.getMessage()
+							+ "exception in method MeasureConcedePartOfOppBehaviour_Agent2");
 		}
 	}
 
@@ -1686,8 +1711,9 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 			MinAcceptCondition(bidReturned);
 		} catch (Exception e) {
 			System.out.println(e.getMessage()
-					+ "exception in method BidToOffer");
+					+ "exception in method BidToOffer_original");
 			this.except = 26;
+			return this.bid_maximum_utility;
 		}
 		// System.out.println("the current threshold is " +
 		// this.utilitythreshold + " with the value of alpha1 is  " + alpha1);
@@ -1697,14 +1723,15 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 	private boolean OtherAcceptCondition(boolean IsAccept) {
 		try {
 			if ((timeline.getTime() >= ((this.concedeTime_Agent2 + this.concedeTime_Agent1) / 2))
-					&& (this.utilitySpace.getUtility(((Offer) ActionOfOpponent)
-							.getBid()) >= this.minUtilityUhreshold)) {
+					&& (this.utilitySpace
+							.getUtility(this.oppPreviousBid_Agent2) >= this.minUtilityUhreshold)) {
 				IsAccept = true;
 			}
 		} catch (Exception e) {
 			this.except = 27;
 			System.out.println(e.getMessage()
-					+ "exception in method AcceptCondition");
+					+ "exception in method OtherAcceptCondition");
+			return true;
 		}
 		return IsAccept;
 	}
@@ -1719,7 +1746,7 @@ public class CUHKAgent2015 extends AbstractNegotiationParty {
 		} catch (Exception e) {
 			this.except = 28;
 			System.out.println(e.getMessage()
-					+ "exception in method AcceptCondition");
+					+ "exception in method MinAcceptCondition");
 		}
 	}
 }

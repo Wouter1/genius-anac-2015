@@ -4,7 +4,47 @@
         <agentRepItems/>
         <partyRepItems/>
         <domainRepItem>
-			<domainRepItem url="file:etc/templates/partydomain/party_domain.xml">
+            
+            <domainRepItem url="file:etc/templates/Domain1/Domain1.xml">
+                <profile url="file:etc/templates/Domain1/Domain1_util1.xml"/>
+                <profile url="file:etc/templates/Domain1/Domain1_util2.xml"/>
+                <profile url="file:etc/templates/Domain1/Domain1_util3.xml"/>
+                <profile url="file:etc/templates/Domain1/Domain1_util4.xml"/>
+	     </domainRepItem>
+            <domainRepItem url="file:etc/templates/Domain2/Domain2.xml">
+                <profile url="file:etc/templates/Domain2/Domain2_util1.xml"/>
+                <profile url="file:etc/templates/Domain2/Domain2_util2.xml"/>
+                <profile url="file:etc/templates/Domain2/Domain2_util3.xml"/>
+                <profile url="file:etc/templates/Domain2/Domain2_util4.xml"/>
+                <profile url="file:etc/templates/Domain2/Domain2_util5.xml"/>
+                <profile url="file:etc/templates/Domain2/Domain2_util6.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/Domain4/Domain4.xml">
+                <profile url="file:etc/templates/Domain4/Domain4_util1.xml"/>
+                <profile url="file:etc/templates/Domain4/Domain4_util2.xml"/>
+                <profile url="file:etc/templates/Domain4/Domain4_util3.xml"/>
+                <profile url="file:etc/templates/Domain4/Domain4_util4.xml"/>
+                <profile url="file:etc/templates/Domain4/Domain4_util5.xml"/>
+                <profile url="file:etc/templates/Domain4/Domain4_util6.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/Domain8/Domain8.xml">
+                <profile url="file:etc/templates/Domain8/Domain8_util1.xml"/>
+                <profile url="file:etc/templates/Domain8/Domain8_util2.xml"/>
+                <profile url="file:etc/templates/Domain8/Domain8_util3.xml"/>
+                <profile url="file:etc/templates/Domain8/Domain8_util4.xml"/>
+                <profile url="file:etc/templates/Domain8/Domain8_util5.xml"/>
+                <profile url="file:etc/templates/Domain8/Domain8_util6.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/Domain16/Domain16.xml">
+                <profile url="file:etc/templates/Domain16/Domain16_util1.xml"/>
+                <profile url="file:etc/templates/Domain16/Domain16_util2.xml"/>
+                <profile url="file:etc/templates/Domain16/Domain16_util3.xml"/>
+                <profile url="file:etc/templates/Domain16/Domain16_util4.xml"/>
+                <profile url="file:etc/templates/Domain16/Domain16_util5.xml"/>
+                <profile url="file:etc/templates/Domain16/Domain16_util6.xml"/>
+            </domainRepItem>
+
+            <domainRepItem url="file:etc/templates/partydomain/party_domain.xml">
                 <profile url="file:etc/templates/partydomain/party1_utility.xml"/>
                 <profile url="file:etc/templates/partydomain/party2_utility.xml"/>
                 <profile url="file:etc/templates/partydomain/party3_utility.xml"/>
@@ -19,7 +59,158 @@
                 <profile url="file:etc/templates/ANAC2015/group1-university/University_util1.xml"/>
                 <profile url="file:etc/templates/ANAC2015/group1-university/University_util2.xml"/>
                 <profile url="file:etc/templates/ANAC2015/group1-university/University_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group1-university/University_util9.xml"/>
             </domainRepItem>
+            <!--<domainRepItem url="file:etc/templates/ANAC2015/group2-dinner/Dinner.xml">-->
+            <!--<profile url="file:etc/templates/ANAC2015/group2-dinner/Dinner_util1.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group2-dinner/Dinner_util2.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group2-dinner/Dinner_util3.xml"/>-->
+            <!--</domainRepItem>-->
+            <domainRepItem url="file:etc/templates/ANAC2015/group2-new_sporthal/New_sporthal.xml">
+                <profile url="file:etc/templates/ANAC2015/group2-new_sporthal/New_sporthal_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group2-new_sporthal/New_sporthal_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group2-new_sporthal/New_sporthal_util3.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group2-politics/Politics.xml">
+                <profile url="file:etc/templates/ANAC2015/group2-politics/Politics_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group2-politics/Politics_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group2-politics/Politics_util3.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery.xml">
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group3-bank_robbery/Bank_Robbery_util9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4.xml">
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group4-zoning_plan/Group4_util9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group5-car_domain/car_domain.xml">
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group5-car_domain/car-Profile9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group6-tram/Tram.xml">
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group6-tram/Tram_Profile9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group7-movie/movie.xml">
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group7-movie/movie-profile9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group8-holiday/holiday.xml">
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group8-holiday/holiday-Profile9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot.xml">
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util5.xml"/>
+            </domainRepItem>
+            <!--<domainRepItem url="file:etc/templates/ANAC2015/group9-vaction/Vaction.xml">-->
+            <!--<profile url="file:etc/templates/ANAC2015/group9-vaction/Vaction_util2.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group9-vaction/Vaction_util3.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group9-vaction/Vaction_util4.xml"/>-->
+            <!--</domainRepItem>-->
+            <domainRepItem url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot.xml">
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group9-killer_robot/KillerRobot_util5.xml"/>
+            </domainRepItem>
+            <!--<domainRepItem url="file:etc/templates/ANAC2015/group10-building_construction/building_construction.xml">-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util1.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util2.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util3.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util4.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util5.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util6.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util7.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util8.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util9.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util10.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util11.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util12.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util13.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util14.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util15.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util16.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util17.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util18.xml"/>-->
+            <!--<profile url="file:etc/templates/ANAC2015/group10-building_construction/building_construction_util19.xml"/>-->
+            <!--</domainRepItem>-->
+            <domainRepItem url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_domain.xml">
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group11-car_purchase/car_purchase_util9.xml"/>
+            </domainRepItem>
+            <domainRepItem url="file:etc/templates/ANAC2015/group12-symposium/symposium.xml">
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile1.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile2.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile3.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile4.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile5.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile6.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile7.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile8.xml"/>
+                <profile url="file:etc/templates/ANAC2015/group12-symposium/Symposium-Profile9.xml"/>
+            </domainRepItem>
+
+
         </domainRepItem>
         <protocolRepItem/>
         <multiPartyProtocolRepItem/>

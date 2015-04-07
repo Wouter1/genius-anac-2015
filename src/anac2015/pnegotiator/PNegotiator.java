@@ -26,8 +26,8 @@ public class PNegotiator extends AbstractNegotiationParty {
 	public AgentState agentState;
 
 	// Parameters of the negotiation
-	private UtilitySpace utilitySpace;
-	private Timeline timeline;
+	// private UtilitySpace utilitySpace;
+	// private Timeline timeline;
 	private List<Objective> objectives;
 
 	// Other private fields
@@ -58,8 +58,8 @@ public class PNegotiator extends AbstractNegotiationParty {
 		// Make sure that this constructor calls it's parent.
 		super(utilitySpace, deadlines, timeline, randomSeed);
 		// Set agent's game parameters
-		this.utilitySpace = utilitySpace;
-		this.timeline = timeline;
+		// this.utilitySpace = utilitySpace;
+		// this.timeline = timeline;
 		this.objectives = utilitySpace.getDomain().getObjectives();
 
 		try {
@@ -104,6 +104,7 @@ public class PNegotiator extends AbstractNegotiationParty {
 		try {
 			setState();
 			updateBayes();
+			System.out.println(currentBid);
 			if (currentBid == null) {
 				nextBid = utilitySpace.getMaxUtilityBid();
 			} else {
@@ -139,9 +140,9 @@ public class PNegotiator extends AbstractNegotiationParty {
 					nextBid = bayes;
 				}
 				// bayesLogic.updateOpponentFrequency(bestBid, 0);
+				if (utilitySpace.getUtility(currentBid) >= lRng)
+					return new Accept();
 			}
-			if (utilitySpace.getUtility(currentBid) >= lRng)
-				return new Accept();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,8 +181,10 @@ public class PNegotiator extends AbstractNegotiationParty {
 		if (Action.getBidFromAction(action) != null)
 			currentBid = Action.getBidFromAction(action);
 		try {
-			updateBayes();
-			bayesLogic.updateOpponentFrequency(currentBid, P);
+			if (currentBid != null) {
+				updateBayes();
+				bayesLogic.updateOpponentFrequency(currentBid, P);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

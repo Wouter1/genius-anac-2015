@@ -45,7 +45,8 @@ public class Forseti extends AbstractNegotiationParty {
 										// value
 	private Random rng;
 	private int noOfPossibleBids;
-	private double utilityCutoff = 0.8;
+	private double utilityCutoff = 0.85;
+	private int recursionCounter = 0;
 
 	/**
 	 * Please keep this constructor. This is called by genius.
@@ -149,6 +150,7 @@ public class Forseti extends AbstractNegotiationParty {
 	// it is built again with an adjusted cutoff value.
 	private void findGoodBids(double cutoff) {
 		goodBids.clear();
+		recursionCounter = recursionCounter + 1;
 
 		Set<Bid> allBids = new HashSet<Bid>();
 		for (int i = 0; i < 10 * noOfPossibleBids; i++) {
@@ -174,23 +176,25 @@ public class Forseti extends AbstractNegotiationParty {
 			}
 		}
 
-		double cutoffAdjustment = 0.05;
+		double cutoffAdjustmentUp = 0.05;
+		double cutoffAdjustmentDown = 0.05;
 
 		// If the total number of bids is relatively low, we need a finer
 		// adjustment
 		if (noOfPossibleBids <= 200) {
-			cutoffAdjustment = 0.02;
+			cutoffAdjustmentUp = 0.02;
 		} else if (noOfPossibleBids <= 100) {
-			cutoffAdjustment = 0.01;
+			cutoffAdjustmentUp = 0.01;
 		}
 
 		// If the size of the list is not within 5% to 20% of the total number
 		// of bids,
 		// the method is run again with an adjusted cutoff.
-		if (goodBids.size() >= 0.2 * noOfPossibleBids) {
-			findGoodBids(cutoff + cutoffAdjustment);
-		} else if (goodBids.size() < 0.05 * noOfPossibleBids) {
-			findGoodBids(cutoff - cutoffAdjustment);
+		if (goodBids.size() >= 0.2 * noOfPossibleBids && recursionCounter < 5) {
+			findGoodBids(cutoff + cutoffAdjustmentUp);
+		} else if (goodBids.size() < 0.05 * noOfPossibleBids
+				&& recursionCounter < 5) {
+			findGoodBids(cutoff - cutoffAdjustmentDown);
 		}
 
 	}
